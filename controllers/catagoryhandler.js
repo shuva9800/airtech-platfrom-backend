@@ -1,15 +1,19 @@
-const Catagory = require("../models/catagory")
+const Catagory = require("../models/tags")
 
+
+//only Admin can create Catagory/Tags
 exports.catagoryCreation = async (req,res)=>{
     try{
+        //fetch data
         const{name, description} = req.body;
+        //validation
         if(!name || !description){
             return res.status(404).json({
                 success: false,
                 message: "all fill to be field"
             })
         }
-
+        //create entry in DB
         const catagoryEntryinDb = await Catagory.create({
             name,description
         })
@@ -28,6 +32,8 @@ exports.catagoryCreation = async (req,res)=>{
         })
     }
 }
+
+
 //fetch all tags
 
 exports.showAllCatagory = async (req,res)=>{
@@ -35,7 +41,7 @@ exports.showAllCatagory = async (req,res)=>{
         const allCatagory = await Catagory.find({},{name:true, description:true});
         return res.status(200).json({
             success:true,
-            message:"all catagory fetched",
+            message:"all Tags/Catagory fetched",
             allCatagory,
         })
     }
@@ -47,6 +53,8 @@ exports.showAllCatagory = async (req,res)=>{
         })
     }
 }
+
+
 //catagory page details
 
 exports.catagoryPageDetails = async (req,res)=>{

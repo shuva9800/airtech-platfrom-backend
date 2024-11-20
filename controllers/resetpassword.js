@@ -72,17 +72,17 @@ exports.resetPassword = async (req,res) =>{
          if(userDetails.resetPasswordExpiry < Date.now()){
             return res.status(401).json({
                 success: false,
-                message: "token is expired re generate it"
+                message: "token is expired, please re generate token again"
              })
          }
  
          //has password 
              const updatedPassword = await bcrypt.hash(newPassword,10);
-             const passwordchange = await User.findByIdAndUpdate({_id:userDetails._id},{password: updatedPassword},{new: true})
-             //const responseOfMailsend = await mailSender(userDetails.email ,"passwordchange-complete","password update successfully" );
+             const passwordchange = await User.findByIdAndUpdate({token:token},{password: updatedPassword},{new: true})
+             //const responseOfMailsend = await mailSender(`${userDetails.email}` ,"passwordchange-complete","password update successfully" );
              return res.status(200).json({
                  success:true,
-                 message: "'password update successfully",
+                 message: "'password reset successfully",
                  passwordchange,
                  responseOfMailsend,
  

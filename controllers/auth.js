@@ -243,7 +243,7 @@ exports.passwordChange = async (req, res) => {
   try {
     //is there email is needed
     const { oldPassword, newPassword, confirmnewPassword } = req.body;
-    console.log("data is-", req.body);
+    
     const userId = req.findPerson.id;
     if (!userId) {
       return res.status(404).json({
