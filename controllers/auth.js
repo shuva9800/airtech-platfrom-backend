@@ -59,17 +59,15 @@ exports.otpCreation = async (req, res) => {
 //signup
 exports.signUp = async (req, res) => {
   try {
-    console.log("inside login:-", req.body);
     const {
       firstName,
       lastName,
       email,
       password,
       confirmPassword,
-      phoneNumber,
+      accountType,
       otp,
     } = req.body;
-    console.log("sifnup Section");
 
     //validation
     if (
@@ -78,6 +76,7 @@ exports.signUp = async (req, res) => {
       !email ||
       !password ||
       !confirmPassword ||
+      !accountType ||
       !otp
     ) {
       return res.status(400).json({
@@ -92,7 +91,7 @@ exports.signUp = async (req, res) => {
         message: "password & confirmpasswor doesnot match please try again",
       });
     }
-    //chech user alraedy exist
+    //check user alraedy exist or not?
     const validUser = await User.findOne({ email });
     if (validUser) {
       return res.status(400).json({
@@ -104,19 +103,15 @@ exports.signUp = async (req, res) => {
     const recentOtp = await OTP.find({ email })
       .sort({ createdAt: -1 })
       .limit(1);
-      
 
     //   .sort({ createdAt: -1 }):
 
     //   This sorts the matching documents by the createdAt field in descending order (-1 means descending).
     //   It ensures the most recent record, based on the creation time, comes first.
+
     //   .limit(1):
-      
+
     //   Limits the result to only one document. This ensures only the most recent OTP record is retrieved.
-
-
-    // console.log("otp is:-")
-    // console.log(recentOtp);
 
     //validation for otp
     if (recentOtp.length == 0) {
@@ -124,7 +119,7 @@ exports.signUp = async (req, res) => {
         success: false,
         message: "OTP not found",
       });
-    } else if (otp !== recentOtp.otp) {
+    } else if (otp !== recentOtp[0].otp) {
       return res.status(400).json({
         success: false,
         message: "otp invalid",
@@ -141,14 +136,14 @@ exports.signUp = async (req, res) => {
       });
     }
     //additional details
+
     const additionalDetails = await Profile.create({
-      gender: null,
+      gender: "Male",
       dateOfbirth: null,
       aboutre: null,
       contactNumber: null,
     });
 
-    // console.log("user creation")
     const user = await User.create({
       firstName,
       lastName,
@@ -156,7 +151,6 @@ exports.signUp = async (req, res) => {
       password: hassPassword,
       confirmpassword: hassPassword,
       accountType,
-      phoneNumber,
       additionalInfo: additionalDetails._id,
       image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
     });
@@ -243,7 +237,7 @@ exports.passwordChange = async (req, res) => {
   try {
     //is there email is needed
     const { oldPassword, newPassword, confirmnewPassword } = req.body;
-    
+
     const userId = req.findPerson.id;
     if (!userId) {
       return res.status(404).json({

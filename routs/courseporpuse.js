@@ -22,7 +22,7 @@ router.put("/updateSection", checkAuthentication,instractor,updateSection );
 router.delete("/deleteSection", checkAuthentication,instractor,deleteSection );
 router.post("/createSubSection", checkAuthentication,instractor,createSubSection );
 router.put("/updateSubSection", checkAuthentication,instractor,updateSubSection );
-router.delete("/deleteSubSection", checkAuthentication,instractor,deleteSubSection );
+router.delete("/deleteSubSection/:id", checkAuthentication,instractor,deleteSubSection );
 //get datails of specfic courses
 router.post("/getSpecificCourse",getSpecificCourse);
 //get all courses
@@ -41,40 +41,6 @@ router.post("/createRatingAndReview",checkAuthentication,student,createRatingAnd
 //get average rating
 router.get("/getAverageRating",getAverageRating );
 router.get("/allRating",allRating );
-
-
-module,exports= router;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //exports route
 module.exports = router;

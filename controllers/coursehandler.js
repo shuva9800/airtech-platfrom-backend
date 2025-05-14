@@ -91,6 +91,8 @@ require("dotenv").config();
 //         })
 //     }
 // }
+
+//crating new course
 exports.courseCreate = async (req, res) => {
   try {
     // Get user ID from request object
@@ -104,35 +106,29 @@ exports.courseCreate = async (req, res) => {
       price,
       tag,
       category,
-      status,
-      instructions,
     } = req.body;
-    console.log(req.body);
 
     // Get thumbnail image from request files
-    //const thumbnail = req.files.thumbnailImage;
+    const thumbnail = req.files.thumbnailImage;
 
-    // Check if any of the required fields are missing          	//!thumbnail ||
+    // Check if any of the required fields are missing
     if (
       !courseName ||
       !courseDescription ||
       !whatYouWillLearn ||
       !price ||
       !tag ||
-      !category
+      !category ||
+      !thumbnail
     ) {
       return res.status(400).json({
         success: false,
         message: "All Fields are Mandatory",
       });
     }
-    if (!status || status === undefined) {
-      status = "Draft";
-    }
+
     // Check if the user is an instructor
-    const instructorDetails = await User.findById(userId, {
-      accountType: "Instructor",
-    });
+    const instructorDetails = await User.findById(userId);
     console.log("instractor dsetails-", instructorDetails);
 
     if (!instructorDetails) {
@@ -152,23 +148,21 @@ exports.courseCreate = async (req, res) => {
     }
     console.log("catagory details-", categoryDetails);
     // Upload the Thumbnail to Cloudinary
-    // const thumbnailImage = await imageUploadToCloudinary(
-    // 	thumbnail,
-    // 	process.env.FOLDER_NAME
-    // );
-    // console.log(thumbnailImage);
+    const thumbnailImage = await imageUploadToCloudinary(
+      thumbnail,
+      process.env.FOLDER_NAME
+    );
+    console.log(thumbnailImage);
     // Create a new course with the given details
     const newCourse = await coures.create({
       courseName,
       courseDescription,
-      instractor: instructorDetails._id, //instructorDetails._id
+      instractor: instructorDetails._id,
       whatYouWillLearn: whatYouWillLearn,
       price,
       tag: tag,
       category: categoryDetails._id,
-      //thumbnail: thumbnailImage.secure_url,
-      //status: status,
-      //instructions: instructions,
+      thumbnil: thumbnailImage.secure_url,
     });
 
     // Add the new course to the User Schema of the Instructor
@@ -214,13 +208,19 @@ exports.courseCreate = async (req, res) => {
 
 exports.getAllCourses = async (req, res) => {
   try {
-    const allCourses = await coures.find({});
+    const allCourses = await coures.find({}).populate("courseContent");
+
     if (!allCourses) {
       return res.status(404).json({
         success: false,
         message: "there is no coures available",
       });
     }
+    return res.status(200).json({
+      success: true,
+      message: "Here is the lists of all courses",
+      allCourses,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({

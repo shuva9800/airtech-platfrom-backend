@@ -142,7 +142,7 @@ exports.allRating = async (req,res) =>{
         //         message: " there is no rating an review for this co"
         //     })
         // }
-        return jres.status(200).json({
+        return res.status(200).json({
             success: true,
             message: "all rating and review fatching successfully",
             allrating

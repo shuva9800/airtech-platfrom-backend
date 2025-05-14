@@ -36,6 +36,7 @@ const courseSchema = new mongoose.Schema({
  },
  thumbnil:{
     type: String,
+    required:true,
  },
  catagory:{
    type: mongoose.Schema.Types.ObjectId,

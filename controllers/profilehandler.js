@@ -27,22 +27,22 @@ exports.updateProfile = async (req,res)=>{
     //update profile in db
     await profileDetails.save();
     //??? we need to update it to user schema? 
-
-    const updateProfile = await User.findByIdAndUpdate(
-        {_id:userId},
-        {
-            $push:{additionalInfo:profileDetails},
-        },
-        {new:true},
-    )
-//check abvo 5 line of code .is needed?
+//................//...............
+    // const updateProfile = await User.findByIdAndUpdate(
+    //     {_id:userId},
+    //     {
+    //         $push:{additionalInfo:profileDetails._id},
+    //     },
+    //     {new:true},
+    // )
+//check abvo 5 line of code .is needed? not needed
 
     //response return
     return res.status(200).json({
         success: true,
         message: "additional details updated successfully",
         profileDetails,
-        updateProfile
+        // updateProfile
     })
    }
    catch(error){
@@ -109,7 +109,7 @@ exports.deleteAccount = async (req,res)=>{
 //'get user all details
 exports.getAllDetails = async (req,res)=>{
     try{
-            //get id
+        //get id
         const id = req.findPerson.id;
         //find user details
         const userDetails = await User.findById(id).populate("additionalInfo").exec();
