@@ -4,8 +4,8 @@ const Profile = require("../models/profile");
 const otpGenerator = require("otp-generator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const mailSender = require("../utility/mailSender");
 require("dotenv").config();
-//not same with codehelp code in signup
 
 // addition code in signup
 
@@ -38,6 +38,8 @@ exports.otpCreation = async (req, res) => {
       });
       findOtp = await OTP.findOne({ otp: newOtp });
     }
+    //send otp to the enter mail
+    await mailSender(email, "Here is the signup Otp", `Your OTP is ${newOtp}`);
 
     //otp save in DB
     const saveOtp = await OTP.create({ email, otp: newOtp });
@@ -259,10 +261,9 @@ exports.passwordChange = async (req, res) => {
         { password: passwordUpdate },
         { new: true }
       );
-      const mailSend = require("../utility/mailSender");
-      const responseOfMailsend = await mailSend(
+      const responseOfMailsend = await mailSender(
         user.email,
-        "passwordchange-complete",
+        `Password updated successfully for ${user.firstName} ${user.lastName}`,
         "password update successfully"
       );
       return res.status(200).json({

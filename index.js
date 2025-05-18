@@ -14,6 +14,7 @@ const profilRouts = require("./routs/userporpuse");
 const courseRouts = require("./routs/courseporpuse");
 const paymentRouts = require("./routs/paymentpurpose");
 const signupRouts = require("./routs/signuppurpose");
+const contactUsRoute = require("./routs/contactUsporpuse");
 
 //parsing middleware
 app.use(express.json());
@@ -48,6 +49,7 @@ app.use("/api/v1/auth",signupRouts);
 app.use("/api/v1/course",courseRouts);
 app.use("/api/v1/payment",paymentRouts);
 app.use("/api/v1/profil",profilRouts);
+app.use("/api/v1/feedback",contactUsRoute);
 
 
 app.listen(port, ()=>{

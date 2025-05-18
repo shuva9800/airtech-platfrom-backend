@@ -53,7 +53,7 @@ exports.showAllCatagory = async (req, res) => {
   }
 };
 
-//catagory page details
+// Get specific catagory page details
 
 // .................//..................
 exports.catagoryPageDetails = async (req, res) => {
@@ -61,31 +61,38 @@ exports.catagoryPageDetails = async (req, res) => {
     //get catagory id
     const { catagoryId } = req.body;
     //get course for specfic catagory id
-    const course = await Catagory.findById({ _id: catagoryId })
+    const selectedCatagory = await Catagory.findById({ _id: catagoryId })
       .populate("course")
       .exec();
     //validation for coourse
-    if (!course) {
+    if (!selectedCatagory) {
       return res.status(404).json({
         success: false,
         message: "there is no avaliable course for this catagory",
       });
     }
-
+    //get different catagory course
+    const differentCategories = await Catagory.find({
+      _id: { $ne: catagoryId },
+    })
+      .populate("course")
+      .exec();
+    //Top 10 selling course
+     // due?
     //return res
     return res.status(200).json({
       success: true,
       message: "course if fetched successfully",
       data: {
-        course,
+        selectedCatagory,
         differentCategories,
       },
     });
   } catch (error) {
-    console.log("error in tag fetch ", err);
+    console.log("error in tag fetch ", error);
     return res.status(500).json({
       success: false,
-      message: err.message,
+      message: error.message,
     });
   }
 };

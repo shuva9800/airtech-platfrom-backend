@@ -3,94 +3,6 @@ const Category = require("../models/catagory");
 const User = require("../models/user");
 const { imageUploadToCloudinary } = require("../utility/imageUpload");
 require("dotenv").config();
-// 1.check for instractor line no:19 or near by
-// exports.courseCreate = async (req,res)=>{
-//     try{
-//         // fetch data
-//         const{courseName, courseDescription,whatYouWillLearn,price,catagory}= req.body;
-//         console.log(courseName)
-//         //get file
-//         //  const file= req.files.thumbnil;
-//         // validation                                                           //||!file
-//         if(!courseName || !courseDescription || !whatYouWillLearn || !price || !catagory  ){
-//             return res.status(401).json({
-//                 success: false,
-//                 message:" all field to be field"
-//             })
-//         }
-//         //???????
-//          //check for instructor
-//          const userId = req.findPerson.id;
-//          //console.log("user id :-",userId)
-//          const instructorDetails = await User.findById(userId);
-//          //console.log("Instructor Details: " , instructorDetails);
-//          //TODO: Verify that userId and instructorDetails._id  are same or different ?
-//          if(instructorDetails._id !== userId){
-//             console.log("instractor id and user id are not same")
-//          }
-
-//          if(!instructorDetails) {
-//              return res.status(404).json({
-//                  success:false,
-//                  message:'Instructor Details not found',
-//              });
-//          }
-//          console.log("instractor id-", instructorDetails._id)
-//          //check given tags is valid or not
-//          const catagoryDetails = await tag.findById({_id:catagory});
-//          if(!catagoryDetails){
-//             return res.status(404).json({
-//                 success:false,
-//                 message:'Tag detils not found',
-//             })
-//          }
-//          console.log("New course is:-", catagoryDetails._id)
-//          //upload image to cloudniary
-//          //const thumbnilImage = await imageUploadToCloudinary(file, process.env.FOLDER_NAME);
-//          //Db entry for new course
-//          const newCourse = await coures.create({
-//             courseName,
-//              courseDescription,
-//              whatYouWillLearn,
-//              price,
-//              catagory:catagory,  //is needed tagDetails._id
-//              //thumbnil:thumbnilImage.secure_url,
-//              instructor:userId ,//action required?instructorDetails._id
-//          })
-
-//          //adding the new course  to user schema
-//          await User.findByIdAndUpdate(
-//             {_id:instructorDetails._id},
-//                 {
-//                     $push: {courses:newCourse.id,
-
-//                 }
-//             },
-//             {new: true}
-//         ).populate("courses")//?? needded?
-//         .exec();
-
-//         //update Tag schema
-//         await tag.findByIdAndUpdate(
-//             {_id:catagoryDetails._id},
-//             {course: newCourse._id},
-//             {new: true},
-//         ).populate("course")//?? needded?
-//         .exec();
-
-//         return res.status(200).json({
-//             success: true,
-//             message:"Course created successfully"
-//         })
-//     }
-//     catch(error){
-//         console.log(error)
-//         return res.status(500).json({
-//             succcess: false,
-//             message :"error occure in course creation"
-//         })
-//     }
-// }
 
 //crating new course
 exports.courseCreate = async (req, res) => {
@@ -230,7 +142,7 @@ exports.getAllCourses = async (req, res) => {
   }
 };
 
-//find specific courses by given id
+//find specific courses with entire details  by given courseid
 exports.getSpecificCourse = async (req, res) => {
   try {
     //fetch datamean course id
@@ -253,7 +165,7 @@ exports.getSpecificCourse = async (req, res) => {
       .populate({
         path: "courseContent",
         populate: {
-          path: "additionalInfo",
+          path: "subsection",
         },
       })
       .populate("ratingandreview")

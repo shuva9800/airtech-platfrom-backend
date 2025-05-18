@@ -11,7 +11,7 @@ const{sectionCreate,updateSection,deleteSection}= require("../controllers/sectio
 const{createSubSection,updateSubSection,deleteSubSection}= require("../controllers/subsectionhandler");
 //rating and review handler function
 const{createRatingAndReview,getAverageRating,allRating}= require("../controllers/ratingandreviewhandler");
-//authentacitation middleware function
+//authentication middleware function
 const{checkAuthentication,student,admin,instractor} = require("../middleware/authorize");
 
 
