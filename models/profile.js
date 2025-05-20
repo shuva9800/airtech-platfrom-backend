@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const profileSchema = new mongoose.Schema({
     gender:{
         type: String,
-        required: true,
+        // required: true,
     },
     dateOfbirth:{
         type: String,

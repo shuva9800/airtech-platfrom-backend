@@ -140,7 +140,7 @@ exports.signUp = async (req, res) => {
     //additional details
 
     const additionalDetails = await Profile.create({
-      gender: "Male",
+      gender: null,
       dateOfbirth: null,
       aboutre: null,
       contactNumber: null,
@@ -200,7 +200,7 @@ exports.login = async (req, res) => {
       const token = jwt.sign(payload, process.env.SECRET_KEY, {
         expiresIn: "5hr",
       });
-      //  findPerson = findPerson.toObject();
+    
       findPerson.token = token;
       findPerson.password = undefined;
 

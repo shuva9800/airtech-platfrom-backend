@@ -55,7 +55,8 @@ exports.showAllCatagory = async (req, res) => {
 
 // Get specific catagory page details
 
-// .................//..................
+// top 10 catagory function pending
+
 exports.catagoryPageDetails = async (req, res) => {
   try {
     //get catagory id

@@ -18,8 +18,8 @@ router.delete("/deleteAccount", checkAuthentication, student, deleteAccount);
 router.get("/getAllDetails", checkAuthentication, getAllDetails);
 //enroll course
 //writer controller for those route
-//  router.get("/getEnrolledcourses",checkAuthentication,getEnrolledCourses);
-// router.put("/updateDisplayPicture",checkAuthentication,updateDisplayPicture);
+router.get("/getEnrolledcourses",checkAuthentication,getEnrolledCourses);
+router.put("/updateDisplayPicture", checkAuthentication, updateDisplayPicture);
 
 //exports route
 module.exports = router;
