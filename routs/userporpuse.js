@@ -16,8 +16,7 @@ const {
 router.put("/updateProfile", checkAuthentication, updateProfile);
 router.delete("/deleteAccount", checkAuthentication, student, deleteAccount);
 router.get("/getAllDetails", checkAuthentication, getAllDetails);
-//enroll course
-//writer controller for those route
+//enroll courses 
 router.get("/getEnrolledcourses",checkAuthentication,getEnrolledCourses);
 router.put("/updateDisplayPicture", checkAuthentication, updateDisplayPicture);
 

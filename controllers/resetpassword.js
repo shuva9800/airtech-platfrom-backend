@@ -1,5 +1,7 @@
+const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const mailSender = require("../utility/mailSender");
+const crypto = require("crypto");
 
 //reset password token
 exports.resetPasswordToken = async (req, res) => {
@@ -14,13 +16,12 @@ exports.resetPasswordToken = async (req, res) => {
       });
     }
     //token generete
-    const token = crypto.randomUUID();
+    const token = crypto.randomBytes(20).toString("hex");
+
     //update user by token and password expiry time
     const updateDetails = await User.findByIdAndUpdate(
       { _id: user._id },
-      { token: token,
-        resetPasswordExpiry: Date.now() + 5 * 60 * 1000 
-      },
+      { token: token, resetPasswordExpiry: Date.now() + 5 * 60 * 1000 },
       { new: true }
     );
 
@@ -47,7 +48,7 @@ exports.resetPasswordToken = async (req, res) => {
   }
 };
 
-//reset password
+// //reset password
 
 exports.resetPassword = async (req, res) => {
   try {
@@ -82,12 +83,16 @@ exports.resetPassword = async (req, res) => {
 
     //has password
     const updatedPassword = await bcrypt.hash(newPassword, 10);
-    const passwordchange = await User.findByIdAndUpdate(
+    const passwordchange = await User.findOneAndUpdate(
       { token: token },
       { password: updatedPassword },
       { new: true }
     );
-    const responseOfMailsend = await mailSender(`${userDetails.email}` ,"passwordchange-complete","password update successfully" );
+    const responseOfMailsend = await mailSender(
+      `${userDetails.email}`,
+      "passwordchange-complete",
+      "password update successfully"
+    );
     return res.status(200).json({
       success: true,
       message: "'password reset successfully",
@@ -98,6 +103,7 @@ exports.resetPassword = async (req, res) => {
     console.log(error);
     return res.status(500).json({
       success: false,
+      errror: error.message,
       message: "error occure for password update",
     });
   }
